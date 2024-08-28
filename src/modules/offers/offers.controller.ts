@@ -11,5 +11,10 @@ export class OffersController {
     return this.offersService.findOne(id);
   }
 
+  @Get()
+  async getAllOffers(): Promise<Offer[]> {
+    return this.offersService.getAll();
+  }
+
   // Add more endpoints as needed for your controller
 }
