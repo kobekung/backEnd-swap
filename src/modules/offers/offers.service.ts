@@ -14,5 +14,7 @@ export class OffersService {
     return this.offersRepository.findOne({ where: { id } });
   }
 
-  // Add more methods as needed for your service
+  async getAll(): Promise<Offer[] | undefined> {
+    return this.offersRepository.find();
+  }
 }
