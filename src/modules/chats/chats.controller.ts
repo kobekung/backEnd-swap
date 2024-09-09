@@ -1,26 +1,22 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 import { ChatsService } from './chats.service';
-import { Chat } from './chat.entity';
+import { IChat } from 'src/interface/Chats.interface';
 
 @Controller('chats')
 export class ChatsController {
   constructor(private readonly chatsService: ChatsService) {}
 
-  @Get(':id')
-  async getChat(@Param('id') id: number): Promise<Chat> {
-    return this.chatsService.findOne(id);
+  @Post('create')
+  async createChat(@Body() createChatDto: IChat) {
+    if (!createChatDto.message) {
+      throw new Error('Message cannot be empty');
+    }
+    return this.chatsService.createChat(createChatDto);
   }
 
-  @Get()
-  async getAllChats(): Promise<Chat[]> {
-    return this.chatsService.findAll();
+  // Example method to get chats
+  @Get('get')
+  async getChats(@Query('fromUserId') fromUserId: number, @Query('toUserId') toUserId: number) {
+    return this.chatsService.getChats(fromUserId, toUserId);
   }
-
-//   @Post()
-//   async createChat(@Body() chat: Chat): Promise<Chat> {
-//     // Assuming you have a method to create a chat
-//     return this.chatsService.create(chat);
-//   }
-
-  // Add more endpoints as needed for your controller
 }
