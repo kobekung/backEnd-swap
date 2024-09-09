@@ -1,22 +1,58 @@
-import { Injectable } from '@nestjs/common';
+// src/modules/reviews/reviews.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Review } from './review.entity';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { User } from '../users/users.entity';
+import { Product } from '../products/products.entity';
+
 
 @Injectable()
 export class ReviewsService {
   constructor(
     @InjectRepository(Review)
-    private reviewsRepository: Repository<Review>,
+    private readonly reviewRepository: Repository<Review>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
   ) {}
 
-  async findOne(id: number): Promise<Review | undefined> {
-    return this.reviewsRepository.findOne({ where: { id } });
+  // Create a new review
+  async createReview(createReviewDto: CreateReviewDto): Promise<Review> {
+    const { reviewerId, productId, rating, content } = createReviewDto;
+
+    const user = await this.userRepository.findOneBy({ id: reviewerId });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const product = await this.productRepository.findOneBy({ id: productId });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    const review = this.reviewRepository.create({
+      user,
+      product,
+      rating,
+      content,
+    });
+
+    return this.reviewRepository.save(review);
   }
 
-  async findAll(): Promise<Review[]> {
-    return this.reviewsRepository.find();
-  }
+  // Get all reviews for a product
+  async getProductReviews(productId: number): Promise<Review[]> {
+    const product = await this.productRepository.findOneBy({ id: productId });
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
 
-  // Add more methods as needed for your service
+    return this.reviewRepository.find({
+      where: { product },
+      order: { createdAt: 'DESC' },
+    });
+  }
 }
