@@ -50,8 +50,11 @@ export class User {
   @OneToMany(() => Comment, comment => comment.user)
   comments: Comment[];
 
-  @OneToMany(() => Offer, offer => offer.user)
-  offers: Offer[];
+  @OneToMany(() => Offer, offer => offer.fromUser)
+  sentOffers: Offer[];
+
+  @OneToMany(() => Offer, offer => offer.toUser)
+  receivedOffers: Offer[];
 
   @OneToMany(() => Notification, notification => notification.user)
   notifications: Notification[];
