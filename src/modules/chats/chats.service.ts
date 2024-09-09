@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Chat } from './chat.entity'; // Import the interface if you use it
+import { Chat } from './chat.entity';
 import { IChat } from 'src/interface/Chats.interface';
 
 @Injectable()
@@ -11,9 +11,8 @@ export class ChatsService {
     private readonly chatRepository: Repository<Chat>,
   ) {}
 
-  // Method to create a chat
   async createChat(createChatDto: IChat): Promise<Chat> {
-    const { from_user_id, to_user_id, message } = createChatDto;
+    const { from_user_id, to_user_id, message, deliveryType } = createChatDto;
 
     if (!message) {
       throw new Error('Message cannot be empty');
@@ -23,12 +22,12 @@ export class ChatsService {
       sender: { id: from_user_id },
       receiver: { id: to_user_id },
       message,
+      deliveryType,
     });
 
     return this.chatRepository.save(chat);
   }
 
-  // Method to get chats (example)
   async getChats(fromUserId: number, toUserId: number): Promise<Chat[]> {
     return this.chatRepository.find({
       where: [

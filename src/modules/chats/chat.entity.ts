@@ -8,6 +8,13 @@ export class Chat {
 
   @Column('text')
   message: string;
+  
+  @Column({
+    type: 'enum',
+    enum: ['IN_PERSON', 'REMOTE'],
+    default: 'REMOTE',
+  })
+  deliveryType: 'IN_PERSON' | 'REMOTE';
 
   @ManyToOne(() => User, user => user.sentChats)
   sender: User;

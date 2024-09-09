@@ -14,7 +14,6 @@ export class ChatsController {
     return this.chatsService.createChat(createChatDto);
   }
 
-  // Example method to get chats
   @Get('get')
   async getChats(@Query('fromUserId') fromUserId: number, @Query('toUserId') toUserId: number) {
     return this.chatsService.getChats(fromUserId, toUserId);
