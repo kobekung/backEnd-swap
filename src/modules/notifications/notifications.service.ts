@@ -1,22 +1,59 @@
-import { Injectable } from '@nestjs/common';
+// src/modules/notifications/notifications.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification } from './notification.entity';
+import { CreateNotificationDto } from './dto/create-notification.dto';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
-    private notificationsRepository: Repository<Notification>,
+    private readonly notificationRepository: Repository<Notification>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async findOne(id: number): Promise<Notification | undefined> {
-    return this.notificationsRepository.findOne({ where: { id } });
+  // Create a new notification
+  async createNotification(createNotificationDto: CreateNotificationDto): Promise<Notification> {
+    const { user_id, message, isRead = false } = createNotificationDto;
+
+    const user = await this.userRepository.findOneBy({ id: user_id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const notification = this.notificationRepository.create({
+      user,
+      message,
+      isRead,
+    });
+
+    return this.notificationRepository.save(notification);
   }
 
-  async findAll(): Promise<Notification[]> {
-    return this.notificationsRepository.find();
+  // Get all notifications for a user
+  async getUserNotifications(user_id: number): Promise<Notification[]> {
+    const user = await this.userRepository.findOneBy({ id: user_id });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.notificationRepository.find({
+      where: { user },
+      order: { createdAt: 'DESC' },
+    });
   }
 
-  // Add more methods as needed for your service
+  // Mark notification as read
+  async markAsRead(id: number): Promise<Notification> {
+    const notification = await this.notificationRepository.findOneBy({ id });
+    if (!notification) {
+      throw new NotFoundException('Notification not found');
+    }
+
+    notification.isRead = true;
+    return this.notificationRepository.save(notification);
+  }
 }
