@@ -68,4 +68,32 @@ export class OffersService {
       relations: ['fromUser', 'toUser', 'product'],
     });
   }
+
+  async acceptOffer(id: number): Promise<Offer> {
+    const offer = await this.offerRepository.findOne({
+      where: { id: id },
+      relations: ['fromUser', 'toUser', 'product'],
+    });
+
+    if (!offer) {
+      throw new NotFoundException('Offer not found');
+    }
+
+    offer.status = OFFER_STATUS_ENUM.ACCEPTED;
+    return this.offerRepository.save(offer);
+  }
+
+  async rejectOffer(id: number): Promise<Offer> {
+    const offer = await this.offerRepository.findOne({
+      where: { id: id },
+      relations: ['fromUser', 'toUser', 'product'],
+    });
+
+    if (!offer) {
+      throw new NotFoundException('Offer not found');
+    }
+
+    offer.status = OFFER_STATUS_ENUM.REJECTED;
+    return this.offerRepository.save(offer);
+  }
 }

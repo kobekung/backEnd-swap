@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Put } from '@nestjs/common';
 import { OffersService } from './offers.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { Offer } from './offer.entity';
@@ -20,5 +20,14 @@ export class OffersController {
   @Get(':id')
   async getOfferById(@Param('id') id: number): Promise<Offer> {
     return this.offersService.getOfferById(id);
+  }
+  @Post('accept')
+  async acceptOffer(@Body() body: { offerId: number }) {
+    return this.offersService.acceptOffer(body.offerId);
+  }
+
+  @Post('reject')
+  async rejectOffer(@Body() body: { offerId: number }) {
+    return this.offersService.rejectOffer(body.offerId);
   }
 }
