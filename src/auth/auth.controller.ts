@@ -23,29 +23,31 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    try {
-      const { email, password } = loginDto;
-      
-      if (!email || !password) {
-        throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
-      }
-
-      const user = await this.authService.validateUser(email, password);
-      
-      if (!user) {
-        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-      }
-      
-      const token = await this.authService.generateToken(user);
-
-      // ตอบกลับเมื่อเข้าสู่ระบบสำเร็จ
-      return {
-        message: 'Login success',
-        ...token, // ส่งกลับ access_token พร้อมข้อความ success
-      };
-    } catch (error) {
-      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+async login(@Body() loginDto: LoginDto) {
+  try {
+    const { email, password } = loginDto;
+    
+    if (!email || !password) {
+      throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
     }
+
+    const user = await this.authService.validateUser(email, password);
+
+    if (!user) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    const token = await this.authService.generateToken(user);
+
+    // Respond with access_token and user id
+    return {
+      message: 'Login success',
+      access_token: token.access_token,  // Assuming token contains access_token
+      id: user.id,  // Include user id for frontend redirection
+    };
+  } catch (error) {
+    throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
   }
+}
+
 }

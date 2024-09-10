@@ -66,11 +66,14 @@ export class AuthService {
   }
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
-    console.log('login', user);
+    console.log('login', user); // Check if user is logged correctly
+  
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-    
-    return this.generateToken(user);
+  
+    const token = await this.generateToken(user); // Assuming generateToken returns access_token
+    return { ...token, id: user.id };  // Make sure id is returned
   }
+  
 }
