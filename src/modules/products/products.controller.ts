@@ -9,9 +9,10 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post('create')
-  async createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
-  }
+async createProduct(@Body() createProductDto: CreateProductDto) {
+  return this.productsService.create(createProductDto);
+}
+
 
   @Get()
   async getAllProducts() {

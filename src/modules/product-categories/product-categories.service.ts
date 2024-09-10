@@ -45,4 +45,8 @@ export class ProductCategoryService {
     category.products.push(product);
     return this.productCategoryRepository.save(category);
   }
+  async findById(categoryId: number): Promise<ProductCategory> {
+    return await this.productCategoryRepository.findOne({ where: { id: categoryId } });
+  }
+  
 }

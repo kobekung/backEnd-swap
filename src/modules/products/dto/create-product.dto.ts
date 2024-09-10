@@ -13,11 +13,12 @@ export class CreateProductDto {
 
   @IsNotEmpty()
   @IsNumber()
-  userId: number;  // Ensure userId is included and validated
+  userId: number;  // Validates user ID
 
   @IsNotEmpty()
   @IsNumber()
-  categoryId: number;
+  categoryId: number;  // Validates category ID
 
   image?: string;
 }
+

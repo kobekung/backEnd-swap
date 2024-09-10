@@ -7,13 +7,17 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UsersService } from '../users/users.service';
 import { ProductCategory } from '../product-categories/product-categories.entity';
 import { Product } from './products.entity';
+import { ProductCategoryService } from '../product-categories/product-categories.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product)
-    private readonly productsRepository: Repository<Product>,
+    private productsRepository: Repository<Product>,
+
     private readonly usersService: UsersService,
+
+    private readonly productCategoryService: ProductCategoryService,  // Inject ProductCategoryService
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -22,15 +26,24 @@ export class ProductsService {
       throw new NotFoundException('User not found');
     }
 
+    const category = await this.productCategoryService.findById(createProductDto.categoryId);  // Use findById
+    if (!category) {
+      throw new NotFoundException('Product category not found');
+    }
+
     const product = this.productsRepository.create({
       ...createProductDto,
       user,
+      category,
     });
-    
-    return this.productsRepository.save(product);
+
+    return await this.productsRepository.save(product);
   }
+  
 
   async findAll(): Promise<Product[]> {
-    return this.productsRepository.find();
+    return this.productsRepository.find({
+      relations: ['user', 'category'],
+    });
   }
 }
