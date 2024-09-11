@@ -71,10 +71,9 @@ export class User {
   @OneToMany(() => Chat, chat => chat.receiver)
   receivedChats: Chat[];
 
-  @OneToMany(() => Follow, follow => follow.follower)
+  @OneToMany(() => Follow, (follow) => follow.follower)
   following: Follow[];
 
-  // Users that are following this user
-  @OneToMany(() => Follow, follow => follow.following)
+  @OneToMany(() => Follow, (follow) => follow.following)
   followers: Follow[];
 }

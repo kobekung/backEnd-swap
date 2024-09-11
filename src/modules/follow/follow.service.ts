@@ -1,27 +1,58 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Follow } from './follow.entity';
+import { User } from '../users/users.entity';
 
 @Injectable()
 export class FollowService {
-  private followers: Record<number, Set<number>> = {};
+  constructor(
+    @InjectRepository(Follow) private followRepository: Repository<Follow>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
-  follow(userId: number, followUserId: number): string {
-    if (!this.followers[userId]) {
-      this.followers[userId] = new Set<number>();
+  async follow(userId: number, followUserId: number): Promise<string> {
+    const follower = await this.userRepository.findOne({ where: { id: userId } });
+    const following = await this.userRepository.findOne({ where: { id: followUserId } });
+
+    if (!follower || !following) {
+      throw new Error('User not found');
     }
 
-    this.followers[userId].add(followUserId);
+    const newFollow = this.followRepository.create({ follower, following });
+    await this.followRepository.save(newFollow);
+
     return `User ${userId} followed user ${followUserId}`;
   }
 
-  unfollow(userId: number, unfollowUserId: number): string {
-    if (this.followers[userId]) {
-      this.followers[userId].delete(unfollowUserId);
-      return `User ${userId} unfollowed user ${unfollowUserId}`;
+  async unfollow(userId: number, unfollowUserId: number): Promise<string> {
+    const follow = await this.followRepository.findOne({
+      where: { follower: { id: userId }, following: { id: unfollowUserId } },
+    });
+
+    if (!follow) {
+      return `User ${userId} is not following user ${unfollowUserId}`;
     }
-    return `User ${userId} is not following user ${unfollowUserId}`;
+
+    await this.followRepository.remove(follow);
+    return `User ${userId} unfollowed user ${unfollowUserId}`;
   }
 
-  getFollowers(userId: number): number[] {
-    return Array.from(this.followers[userId] || []);
+  async getFollowers(userId: number): Promise<User[]> {
+    const follows = await this.followRepository.find({
+      where: { following: { id: userId } },
+      relations: ['follower'],
+    });
+
+    return follows.map((follow) => follow.follower);
+  }
+
+  async getFollowing(userId: number): Promise<User[]> {
+    const follows = await this.followRepository.find({
+      where: { follower: { id: userId } },
+      relations: ['following'],
+    });
+
+    return follows.map((follow) => follow.following);
   }
 }

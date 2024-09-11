@@ -1,22 +1,28 @@
-import { Controller, Post, Delete, Param, Get } from '@nestjs/common';
+import { Controller, Post, Delete, Get, Param } from '@nestjs/common';
 import { FollowService } from './follow.service';
+import { User } from '../users/users.entity';
 
 @Controller('follow')
 export class FollowController {
   constructor(private readonly followService: FollowService) {}
 
   @Post(':userId/follow/:followUserId')
-  follow(@Param('userId') userId: number, @Param('followUserId') followUserId: number): string {
+  async follow(@Param('userId') userId: number, @Param('followUserId') followUserId: number): Promise<string> {
     return this.followService.follow(userId, followUserId);
   }
 
   @Delete(':userId/unfollow/:unfollowUserId')
-  unfollow(@Param('userId') userId: number, @Param('unfollowUserId') unfollowUserId: number): string {
+  async unfollow(@Param('userId') userId: number, @Param('unfollowUserId') unfollowUserId: number): Promise<string> {
     return this.followService.unfollow(userId, unfollowUserId);
   }
 
   @Get(':userId/followers')
-  getFollowers(@Param('userId') userId: number): number[] {
+  async getFollowers(@Param('userId') userId: number): Promise<User[]> {
     return this.followService.getFollowers(userId);
+  }
+
+  @Get(':userId/following')
+  async getFollowing(@Param('userId') userId: number): Promise<User[]> {
+    return this.followService.getFollowing(userId);
   }
 }
