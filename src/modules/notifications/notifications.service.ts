@@ -15,9 +15,8 @@ export class NotificationsService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  // Create a new notification
   async createNotification(createNotificationDto: CreateNotificationDto): Promise<Notification> {
-    const { user_id, message, isRead = false } = createNotificationDto;
+    const { user_id, message, isRead = false, offer_id } = createNotificationDto;
 
     const user = await this.userRepository.findOneBy({ id: user_id });
     if (!user) {
@@ -28,12 +27,12 @@ export class NotificationsService {
       user,
       message,
       isRead,
+      offerId: offer_id, // Ensure this matches your entity
     });
 
     return this.notificationRepository.save(notification);
   }
 
-  // Get all notifications for a user
   async getUserNotifications(user_id: number): Promise<Notification[]> {
     const user = await this.userRepository.findOneBy({ id: user_id });
     if (!user) {
@@ -46,7 +45,6 @@ export class NotificationsService {
     });
   }
 
-  // Mark notification as read
   async markAsRead(id: number): Promise<Notification> {
     const notification = await this.notificationRepository.findOneBy({ id });
     if (!notification) {

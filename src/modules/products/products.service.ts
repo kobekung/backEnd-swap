@@ -46,4 +46,7 @@ export class ProductsService {
       relations: ['user', 'category'],
     });
   }
+  async findByUser(userId: number): Promise<Product[]> {
+    return this.productsRepository.find({ where: { user: { id: userId } } });
+  }
 }

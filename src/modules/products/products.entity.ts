@@ -17,6 +17,7 @@ export class Product {
   @Column('text')
   description: string;
 
+
   @Column()
   status: string;  // Status can be an ENUM, but for simplicity, it's kept as a string here
 

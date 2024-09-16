@@ -25,4 +25,8 @@ export class FollowController {
   async getFollowing(@Param('userId') userId: number): Promise<User[]> {
     return this.followService.getFollowing(userId);
   }
+  @Get(':userId/following/:targetUserId')
+  async isFollowing(@Param('userId') userId: number, @Param('targetUserId') targetUserId: number): Promise<boolean> {
+    return this.followService.isFollowing(userId, targetUserId);
+  }
 }

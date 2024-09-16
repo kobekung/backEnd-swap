@@ -8,6 +8,9 @@ export class Offer {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  name: string;
+
   @Column('text')
   description: string;
 

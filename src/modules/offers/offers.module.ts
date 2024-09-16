@@ -5,6 +5,7 @@ import { OffersController } from './offers.controller';
 import { Offer } from './offer.entity';
 import { User } from '../users/users.entity';
 import { Product } from '../products/products.entity';
+import { NotificationsModule } from '../notifications/notifications.module';
   // Ensure correct path
 
 @Module({

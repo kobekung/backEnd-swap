@@ -20,5 +20,7 @@ export class CreateProductDto {
   categoryId: number;  // Validates category ID
 
   image?: string;
+
+
 }
 

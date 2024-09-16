@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 import { User } from '../users/users.entity';
+import { Offer } from '../offers/offer.entity';
  // Ensure correct path
 
 @Entity('notifications')
@@ -12,9 +13,11 @@ export class Notification {
 
   @Column({ default: false })
   isRead: boolean;
-
   @ManyToOne(() => User, user => user.notifications)
   user: User;
+
+  @Column({ nullable: true })
+  offerId?: number;
 
   @CreateDateColumn()
   createdAt: Date;
