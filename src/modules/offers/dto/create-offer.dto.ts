@@ -25,7 +25,7 @@ export class CreateOfferDto {
 
   @IsOptional()
   @IsString()
-  image?: string;
+  image?: string; 
 
   @IsNotEmpty()
   @IsNumber()

@@ -49,4 +49,10 @@ export class ProductsService {
   async findByUser(userId: number): Promise<Product[]> {
     return this.productsRepository.find({ where: { user: { id: userId } } });
   }
+  async findById(id: number): Promise<Product> {
+    return this.productsRepository.findOne({ where: { id }, relations: ['user', 'category'] });
+  }
+  async deleteProduct(id: number): Promise<void> {
+    await this.productsRepository.delete(id);
+  }
 }

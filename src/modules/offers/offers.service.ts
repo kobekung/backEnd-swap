@@ -21,10 +21,11 @@ export class OffersService {
   ) {}
 
   async create(createOfferDto: CreateOfferDto): Promise<Offer> {
-    const { name,from_user_id, to_user_id, product_id, description, status, image, price } = createOfferDto;
+    const { name, from_user_id, to_user_id, product_id, description, status, image, price } = createOfferDto;
+    
+    console.log('Received DTO:', createOfferDto); // Debug log
   
     try {
-      // ตรวจสอบว่าผู้ส่งและผู้รับมีอยู่ในฐานข้อมูล
       const fromUser = await this.userRepository.findOneBy({ id: from_user_id });
       if (!fromUser) {
         throw new NotFoundException('Sender user not found');
@@ -40,17 +41,18 @@ export class OffersService {
         throw new NotFoundException('Product not found');
       }
   
-      // สร้างข้อเสนอใหม่
       const offer = this.offerRepository.create({
         name,
         description,
         status: status || OFFER_STATUS_ENUM.PENDING,
         image,
         price,
-        fromUser, // ตั้งค่าผู้ส่งข้อเสนอ
-        toUser,   // ตั้งค่าผู้รับข้อเสนอ
+        fromUser,
+        toUser,
         product,
       });
+  
+      console.log('Offer entity:', offer); // Debug log
   
       return await this.offerRepository.save(offer);
     } catch (error) {
@@ -58,6 +60,7 @@ export class OffersService {
       throw new InternalServerErrorException('An error occurred while creating the offer.');
     }
   }
+  
   
 
   async getOfferById(id: number): Promise<Offer> {

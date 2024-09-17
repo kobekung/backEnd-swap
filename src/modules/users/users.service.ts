@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/UpdateUserDto';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +38,18 @@ export class UsersService {
   }
   async findById(id: number): Promise<User | undefined> {
     return this.usersRepository.findOne({ where: { id } });
+  }
+  async editProfile(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // อัปเดตข้อมูลผู้ใช้ด้วยข้อมูลใหม่
+    Object.assign(user, updateUserDto);
+
+    return this.usersRepository.save(user);
   }
  
 }

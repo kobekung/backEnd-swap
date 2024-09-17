@@ -15,7 +15,7 @@ export class Offer {
   description: string;
 
   @Column({ nullable: true })
-  image: string;  // New field for image
+  image?: string;  // New field for image
 
   @Column({ type: 'decimal', nullable: true })
   price: number;  // New field for price
