@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
@@ -40,16 +40,30 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
   async editProfile(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
+    try {
+      const user = await this.usersRepository.findOne({ where: { id } });
+  
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+  
+      // Check if the new email is already in use by another user
+      if (updateUserDto.email) {
+        const existingUser = await this.usersRepository.findOne({ where: { email: updateUserDto.email } });
+        if (existingUser && existingUser.id !== id) {
+          throw new ConflictException('Email already in use');
+        }
+      }
+  
+      // Update user data
+      Object.assign(user, updateUserDto);
+  
+      return await this.usersRepository.save(user);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new InternalServerErrorException('Error updating user');
     }
-
-    // อัปเดตข้อมูลผู้ใช้ด้วยข้อมูลใหม่
-    Object.assign(user, updateUserDto);
-
-    return this.usersRepository.save(user);
   }
- 
+  
+  
 }

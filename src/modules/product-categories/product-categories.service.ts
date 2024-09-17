@@ -46,7 +46,18 @@ export class ProductCategoryService {
     return this.productCategoryRepository.save(category);
   }
   async findById(categoryId: number): Promise<ProductCategory> {
-    return await this.productCategoryRepository.findOne({ where: { id: categoryId } });
+    return await this.productCategoryRepository.findOne({ where: { id: categoryId } ,relations: ['products']});
   }
-  
+  async findProductsByCategory(categoryId: number): Promise<Product[]> {
+    const category = await this.productCategoryRepository.findOne({
+      where: { id: categoryId },
+      relations: ['products'],
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    return category.products;
+  }
 }

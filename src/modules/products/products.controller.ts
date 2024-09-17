@@ -60,4 +60,8 @@ async createProduct(@Body() createProductDto: CreateProductDto) {
   async deleteProduct(@Param('id') id: number): Promise<void> { 
     await this.productsService.deleteProduct(id);
   }
+  @Get('/name/:name')
+  async findByName(@Param('name') name: string): Promise<Product> {
+    return this.productsService.findByName(name);
+  }
 }

@@ -55,4 +55,7 @@ export class ProductsService {
   async deleteProduct(id: number): Promise<void> {
     await this.productsRepository.delete(id);
   }
+  async findByName(name: string): Promise<Product> {
+    return this.productsRepository.findOne({ where: { name } });
+  }
 }

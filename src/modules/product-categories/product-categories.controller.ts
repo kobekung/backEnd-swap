@@ -23,4 +23,13 @@ export class ProductCategoryController {
   ) {
     return this.productCategoryService.linkProductToCategory(productId, categoryId);
   }
+  @Get(':categoryId')
+  async findById(@Param('categoryId') categoryId: number) {
+    return this.productCategoryService.findById(categoryId);
+  }
+  @Get(':categoryId/products')
+  async findProductsByCategory(@Param('categoryId') categoryId: number) {
+    return this.productCategoryService.findProductsByCategory(categoryId);
+  }
+  
 }

@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string) {
+  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, address?: string) {
     // สร้างแฮชของรหัสผ่าน
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Hashed Password:', hashedPassword); // Debug: แสดง hash รหัสผ่านที่สร้างขึ้นมา
@@ -24,6 +24,7 @@ export class AuthService {
         firstName,
         lastName,
         phoneNumber,
+        address,
       });
       return this.generateToken(user);
     } catch (error) {
