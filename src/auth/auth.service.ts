@@ -2,6 +2,7 @@ import { ConflictException, HttpException, HttpStatus, Injectable } from '@nestj
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { log } from 'console';
+import { ROLE_ENUM } from 'src/enums/role.enum';
 import { User } from 'src/modules/users/users.entity';
 import { UsersService } from 'src/modules/users/users.service';
 
@@ -12,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, address?: string) {
+  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, address?: string, role: ROLE_ENUM = ROLE_ENUM.USER) {
     // สร้างแฮชของรหัสผ่าน
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Hashed Password:', hashedPassword); // Debug: แสดง hash รหัสผ่านที่สร้างขึ้นมา
@@ -25,6 +26,7 @@ export class AuthService {
         lastName,
         phoneNumber,
         address,
+        role,
       });
       return this.generateToken(user);
     } catch (error) {
