@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { ROLE_ENUM } from 'src/enums/role.enum';
+import { STARUS_ENUM } from 'src/enums/user_status.enums';
 
 export class CreateUserDto {
   @IsString()
@@ -28,6 +29,9 @@ export class CreateUserDto {
   @IsOptional() // Optional because the role can default to 'user'
   @IsString()
   role?: ROLE_ENUM = ROLE_ENUM.USER;
-
+  
+  @IsOptional() // Optional because the role can default to 'user'
+  @IsString()
+  status?: STARUS_ENUM = STARUS_ENUM.ON;
 
 }

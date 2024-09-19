@@ -1,4 +1,5 @@
 import { ROLE_ENUM } from "src/enums/role.enum";
+import { STARUS_ENUM } from "src/enums/user_status.enums";
 
 export interface IUser{
     id: number;
@@ -11,6 +12,7 @@ export interface IUser{
     profile_image?: string;
     nickname?: string;
     role_ENUM: ROLE_ENUM;
+    status: STARUS_ENUM;
 }
 
 export interface ILogin {

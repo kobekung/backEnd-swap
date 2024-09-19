@@ -41,6 +41,9 @@ export class User {
   @Column({ type: 'enum', enum: ['user', 'admin'], default: 'user' })
   role: string;
 
+  @Column({ type: 'enum', enum: ['on', 'off'], default: 'on' })
+  status: string;
+
   @ManyToOne(() => Admin, admin => admin.users)
   admin: Admin;
   

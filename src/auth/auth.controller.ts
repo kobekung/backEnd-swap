@@ -17,7 +17,8 @@ export class AuthController {
         createUserDto.lastName,
         createUserDto.phoneNumber,
         createUserDto.address,
-        createUserDto.role
+        createUserDto.role,
+        createUserDto.status
       );
     } catch (error) {
       throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
