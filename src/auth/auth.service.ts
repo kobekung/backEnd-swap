@@ -14,7 +14,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, address?: string, role: ROLE_ENUM = ROLE_ENUM.USER,status: STARUS_ENUM = STARUS_ENUM.ON) {
+  async register(email: string, password: string, firstName: string, lastName: string, phoneNumber: string, address?: string, role: ROLE_ENUM = ROLE_ENUM.USER,status: STARUS_ENUM = STARUS_ENUM.ON,profilePicture: string = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png') {
     // สร้างแฮชของรหัสผ่าน
     const hashedPassword = await bcrypt.hash(password, 10);
     console.log('Hashed Password:', hashedPassword); // Debug: แสดง hash รหัสผ่านที่สร้างขึ้นมา
@@ -28,7 +28,8 @@ export class AuthService {
         phoneNumber,
         address,
         role,
-        status
+        status,
+        profilePicture
       });
       return this.generateToken(user);
     } catch (error) {

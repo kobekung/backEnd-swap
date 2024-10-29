@@ -18,4 +18,5 @@ export class ChatsController {
   async getChats(@Query('fromUserId') fromUserId: number, @Query('toUserId') toUserId: number) {
     return this.chatsService.getChats(fromUserId, toUserId);
   }
+
 }

@@ -11,11 +11,6 @@ export class ProductCategoryController {
     return this.productCategoryService.createCategory(createProductCategoryDto);
   }
 
-  @Get()
-  async getAllCategories() {
-    return this.productCategoryService.findAllCategories();
-  }
-
   @Post(':categoryId/products/:productId')
   async linkProductToCategory(
     @Param('categoryId') categoryId: number,
@@ -32,4 +27,9 @@ export class ProductCategoryController {
     return this.productCategoryService.findProductsByCategory(categoryId);
   }
   
+  @Get()
+  async getAllCategories() {
+    return this.productCategoryService.findAllCategories();
+  }
+
 }
