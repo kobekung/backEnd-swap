@@ -45,16 +45,7 @@ export class UsersService {
   
       if (!user) {
         throw new NotFoundException('User not found');
-      }
-  
-      // Check if the new email is already in use by another user
-      if (updateUserDto.email) {
-        const existingUser = await this.usersRepository.findOne({ where: { email: updateUserDto.email } });
-        if (existingUser && existingUser.id !== id) {
-          throw new ConflictException('Email already in use');
-        }
-      }
-  
+      }  
       // Update user data
       Object.assign(user, updateUserDto);
   
@@ -64,6 +55,6 @@ export class UsersService {
       throw new InternalServerErrorException('Error updating user');
     }
   }
-  
+
   
 }

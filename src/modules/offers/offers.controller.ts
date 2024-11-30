@@ -29,6 +29,14 @@ async getOfferById(@Param('id') id: number): Promise<Offer> {
   async getOffersByUserId(@Param('user_id') user_id: number): Promise<Offer[]> {
     return this.offersService.getOffersByUserId(user_id);
   }
+  @Get('sent/:user_id')
+  async getOffersBySenderId(@Param('user_id') user_id: number): Promise<Offer[]> {
+    return this.offersService.getOffersBySenderId(user_id);
+  }
+  @Get('receiver/:user_id')
+  async getOffersByReceiverId(@Param('user_id') user_id: number): Promise<Offer[]> {
+    return this.offersService.getOffersByReceiverId(user_id);
+  }
   @Post('accept')
   async acceptOffer(@Body() body: { offerId: number }) {
     return this.offersService.acceptOffer(body.offerId);
@@ -55,5 +63,7 @@ async getOfferById(@Param('id') id: number): Promise<Offer> {
     // Return the file URL
     return { url: `http://localhost:3001/uploads/${file.filename}` };
   }
+
+
   
 }

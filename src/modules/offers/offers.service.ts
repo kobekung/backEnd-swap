@@ -120,6 +120,32 @@ export class OffersService {
     }
     return offers;
   }
+
+  
+  async getOffersBySenderId(user_id: number): Promise<Offer[]> {
+    const offers = await this.offerRepository.find({
+      where: { fromUser: { id: user_id } },
+      relations: ['fromUser', 'toUser', 'product'],
+    });
+  
+    if (!offers.length) {
+      throw new NotFoundException('No offers found for this user');
+    }
+    return offers;
+  }
+  
+  async getOffersByReceiverId(user_id: number): Promise<Offer[]> {
+    const offers = await this.offerRepository.find({
+      where: { toUser: { id: user_id } },
+      relations: ['fromUser', 'toUser', 'product'],
+      order: { createdAt: 'DESC' },
+    });
+  
+    if (!offers.length) {
+      throw new NotFoundException('No offers found for this user');
+    }
+    return offers;
+  }
   
   
 
