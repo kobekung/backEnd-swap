@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, Param } from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { IChat } from 'src/interface/Chats.interface';
 
@@ -14,9 +14,16 @@ export class ChatsController {
     return this.chatsService.createChat(createChatDto);
   }
 
+  
   @Get('get')
-  async getChats(@Query('fromUserId') fromUserId: number, @Query('toUserId') toUserId: number) {
-    return this.chatsService.getChats(fromUserId, toUserId);
+  async getChats(
+    @Query('fromUserId') fromUserId: number,
+    @Query('toUserId') toUserId: number,
+  ) {
+    // Call the service method to get chats between users
+    const chats = await this.chatsService.getChatsBetweenUsers(fromUserId, toUserId);
+    return chats;
   }
+ 
 
 }

@@ -28,15 +28,70 @@ export class ChatsService {
     return this.chatRepository.save(chat);
   }
 
-  async getChats(fromUserId: number, toUserId: number): Promise<Chat[]> {
-    return this.chatRepository.find({
+  async getChats(fromUserId: number, toUserId: number): Promise<any[]> {
+    const chats = await this.chatRepository.find({
       where: [
         { sender: { id: fromUserId }, receiver: { id: toUserId } },
-        { sender: { id: toUserId }, receiver: { id: fromUserId } }
+        { sender: { id: toUserId }, receiver: { id: fromUserId } },
       ],
       order: { createdAt: 'ASC' },
-      relations: ['sender', 'receiver'],
+      relations: ['sender', 'receiver'], // Ensure sender and receiver relations are loaded
     });
+  
+    // Format the response to include sender and receiver details
+    return chats.map((chat) => ({
+      id: chat.id,
+      message: chat.message,
+      createdAt: chat.createdAt,
+      sender: {
+        id: chat.sender.id,
+        firstName: chat.sender.firstName,
+        lastName: chat.sender.lastName,
+        profilePicture: chat.sender.profilePicture,
+      },
+      receiver: {
+        id: chat.receiver.id,
+        firstName: chat.receiver.firstName,
+        lastName: chat.receiver.lastName,
+        profilePicture: chat.receiver.profilePicture,
+      },
+    }));
+  }
+  
+  
+  async getChatById(id: number) {
+    return await this.chatRepository.findOne({
+      where: { id },
+    });
+  }
+  async getChatsBetweenUsers(fromUserId: number, toUserId: number): Promise<any[]> {
+    const chats = await this.chatRepository.find({
+      where: [
+        { sender: { id: fromUserId }, receiver: { id: toUserId } },
+        { sender: { id: toUserId }, receiver: { id: fromUserId } },
+      ],
+      order: { createdAt: 'ASC' },
+      relations: ['sender', 'receiver'], // Ensure sender and receiver relations are loaded
+    });
+  
+    // Format the response to include sender and receiver details
+    return chats.map((chat) => ({
+      id: chat.id,
+      message: chat.message,
+      createdAt: chat.createdAt,
+      sender: {
+        id: chat.sender.id,
+        firstName: chat.sender.firstName,
+        lastName: chat.sender.lastName,
+        profilePicture: chat.sender.profilePicture,
+      },
+      receiver: {
+        id: chat.receiver.id,
+        firstName: chat.receiver.firstName,
+        lastName: chat.receiver.lastName,
+        profilePicture: chat.receiver.profilePicture,
+      },
+    }));
   }
   
 }
