@@ -12,21 +12,23 @@ export class ChatsService {
   ) {}
 
   async createChat(createChatDto: IChat): Promise<Chat> {
-    const { from_user_id, to_user_id, message, deliveryType } = createChatDto;
-
+    const { from_user_id, to_user_id, message, deliveryType, productId } = createChatDto;
+  
     if (!message) {
       throw new Error('Message cannot be empty');
     }
-
+  
     const chat = this.chatRepository.create({
       sender: { id: from_user_id },
       receiver: { id: to_user_id },
       message,
       deliveryType,
+      product: productId ? { id: productId } : null, // Ensure product relation is optional
     });
-
+  
     return this.chatRepository.save(chat);
   }
+  
 
   async getChats(fromUserId: number, toUserId: number): Promise<any[]> {
     const chats = await this.chatRepository.find({

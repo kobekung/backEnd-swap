@@ -63,7 +63,12 @@ async getOfferById(@Param('id') id: number): Promise<Offer> {
     // Return the file URL
     return { url: `http://localhost:3001/uploads/${file.filename}` };
   }
-
-
-  
+  @Post('update-delivery-type')
+  async updateDeliveryType(
+    @Body('offerId') offerId: number,
+    @Body('deliveryType') deliveryType: 'IN_PERSON' | 'REMOTE',
+  ) {
+    const updatedOffer = await this.offersService.updateDeliveryType(offerId, deliveryType);
+    return { message: 'Delivery type updated successfully', updatedOffer };
+  }
 }

@@ -14,6 +14,14 @@ export class Offer {
   @Column('text')
   description: string;
 
+  @Column({
+    type: 'enum',
+    enum: ['IN_PERSON', 'REMOTE'],
+    nullable: true, // Allow null values
+  })
+  deliveryType?: 'IN_PERSON' | 'REMOTE';
+  
+
   @Column({ nullable: true })
   image?: string;  // New field for image
 

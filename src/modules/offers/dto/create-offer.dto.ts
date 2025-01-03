@@ -1,5 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsNumber, IsString } from 'class-validator';
 import { OFFER_STATUS_ENUM } from 'src/enums/offer_status.enum';
+import { Column } from 'typeorm';
 
 export class CreateOfferDto {
 
@@ -22,6 +23,14 @@ export class CreateOfferDto {
 
   @IsEnum(OFFER_STATUS_ENUM)
   status?: OFFER_STATUS_ENUM;
+
+  @Column({
+    type: 'enum',
+    enum: ['IN_PERSON', 'REMOTE'],
+    nullable: true, // Allow null values
+  })
+  deliveryType?: 'IN_PERSON' | 'REMOTE';
+  
 
   @IsOptional()
   @IsString()

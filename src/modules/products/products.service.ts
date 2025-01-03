@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { ProductCategory } from '../product-categories/product-categories.entity';
 import { Product } from './products.entity';
 import { ProductCategoryService } from '../product-categories/product-categories.service';
+import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
 
 @Injectable()
 export class ProductsService {
@@ -57,5 +58,8 @@ export class ProductsService {
   }
   async findByName(name: string): Promise<Product> {
     return this.productsRepository.findOne({ where: { name } });
+  }
+  async findByStatus(status: PRODUCT_STATUS_ENUM): Promise<Product[]> {
+    return this.productsRepository.find({ where: { status } });
   }
 }

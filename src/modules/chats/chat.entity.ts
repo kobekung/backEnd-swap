@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';  // Ensure correct path
 import { User } from '../users/users.entity';
+import { Product } from '../products/products.entity';
 
 @Entity('chats')
 export class Chat {
@@ -21,6 +22,10 @@ export class Chat {
 
   @ManyToOne(() => User, user => user.receivedChats)
   receiver: User;
+
+  @ManyToOne(() => Product, (product) => product.chats, { nullable: true })
+  product: Product;
+
 
   @CreateDateColumn()
   createdAt: Date;

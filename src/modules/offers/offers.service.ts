@@ -21,7 +21,7 @@ export class OffersService {
   ) {}
 
   async create(createOfferDto: CreateOfferDto): Promise<Offer> {
-    const { name, from_user_id, to_user_id, product_id, description, status, image, price } = createOfferDto;
+    const { name, from_user_id, to_user_id, product_id, description, status, image, price ,deliveryType} = createOfferDto;
     
     console.log('Received DTO:', createOfferDto); // Debug log
   
@@ -50,6 +50,7 @@ export class OffersService {
         fromUser,
         toUser,
         product,
+        deliveryType,
       });
   
       console.log('Offer entity:', offer); // Debug log
@@ -146,8 +147,12 @@ export class OffersService {
     }
     return offers;
   }
-  
-  
-
-  
+  async updateDeliveryType(offerId: number, deliveryType: 'IN_PERSON' | 'REMOTE'): Promise<Offer> {
+    const offer = await this.offerRepository.findOneBy({ id: offerId });
+    if (!offer) {
+      throw new NotFoundException(`Offer with ID ${offerId} not found`);
+    }
+    offer.deliveryType = deliveryType;
+    return await this.offerRepository.save(offer);
+  }
 }

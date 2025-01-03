@@ -5,6 +5,8 @@ import { Offer } from '../offers/offer.entity';  // Ensure correct path
 import { User } from '../users/users.entity';
 import { ProductCategory } from '../product-categories/product-categories.entity';
 import { Review } from '../reviews/review.entity';
+import { Chat } from '../chats/chat.entity';
+import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
 
 @Entity('products')
 export class Product {
@@ -21,8 +23,12 @@ export class Product {
   price: number;
 
 
-  @Column()
-  status: string;  // Status can be an ENUM, but for simplicity, it's kept as a string here
+  @Column({
+    type: 'enum',
+    enum: PRODUCT_STATUS_ENUM,
+    default: PRODUCT_STATUS_ENUM.AVAILABLE, 
+  })
+  status: PRODUCT_STATUS_ENUM;  
 
   @Column({ nullable: true })
   image: string;
@@ -35,6 +41,9 @@ export class Product {
 
   @OneToMany(() => Offer, offer => offer.product)
   offers: Offer[];
+
+  @OneToMany(() => Chat, chats => chats.product)
+  chats: Chat[];
 
   @ManyToOne(() => ProductCategory, category => category.products)
   category: ProductCategory;

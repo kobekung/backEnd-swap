@@ -1,12 +1,13 @@
 // src/modules/products/products.controller.ts
 
-import { Body, Controller, Post, Get, Param, UseInterceptors, HttpStatus, HttpException, UploadedFile, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, Param, UseInterceptors, HttpStatus, HttpException, UploadedFile, Delete, Query, NotFoundException } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './products.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
+import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
 
 @Controller('products')
 export class ProductsController {
@@ -63,5 +64,13 @@ async createProduct(@Body() createProductDto: CreateProductDto) {
   @Get('/name/:name')
   async findByName(@Param('name') name: string): Promise<Product> {
     return this.productsService.findByName(name);
+  }
+
+  @Get('status')
+  async findByStatus(@Query('status') status: PRODUCT_STATUS_ENUM) {
+    if (!Object.values(PRODUCT_STATUS_ENUM).includes(status as PRODUCT_STATUS_ENUM)) {
+      throw new NotFoundException('Invalid product status');
+    }
+    return await this.productsService.findByStatus(status as PRODUCT_STATUS_ENUM);
   }
 }
