@@ -16,23 +16,7 @@ export class ReportsService {
   ) {}
 
   // Create a new report
-  async createReport(createReportDto: CreateReportDto): Promise<Report> {
-    const { user_id, reason, details } = createReportDto;
 
-    const user = await this.userRepository.findOneBy({ id: user_id });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    const report = this.reportRepository.create({
-      user,
-      reason,
-      details,
-      status: 'pending', // Default status
-    });
-
-    return this.reportRepository.save(report);
-  }
 
   // Get all reports
   async getAllReports(): Promise<Report[]> {

@@ -62,4 +62,26 @@ export class ProductsService {
   async findByStatus(status: PRODUCT_STATUS_ENUM): Promise<Product[]> {
     return this.productsRepository.find({ where: { status } });
   }
+  
+  async markAsCompleted(productId: number): Promise<Product> {
+    const product = await this.findById(productId);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+  
+    // Update status to an existing enum value
+    product.status = PRODUCT_STATUS_ENUM.COMPLETE; // Replace with appropriate status
+    return this.productsRepository.save(product);
+  }
+  async checkStatus(productId: number): Promise<{ productId: number; status: string }> {
+    const product = await this.productsRepository.findOne({ where: { id: productId } });
+  
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${productId} not found`);
+    }
+  
+    return { productId: product.id, status: product.status };
+  }
+  
+  
 }

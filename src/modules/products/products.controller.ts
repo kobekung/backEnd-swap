@@ -73,4 +73,13 @@ async createProduct(@Body() createProductDto: CreateProductDto) {
     }
     return await this.productsService.findByStatus(status as PRODUCT_STATUS_ENUM);
   }
+  @Post('complete')
+  async markAsCompleted(@Body('productId') productId: number) {
+    return this.productsService.markAsCompleted(productId);
+  }
+  @Get('status/:productId')
+async checkStatusByProductId(@Param('productId') productId: number) {
+  return this.productsService.checkStatus(productId);
+}
+
 }

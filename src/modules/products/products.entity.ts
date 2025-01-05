@@ -50,6 +50,7 @@ export class Product {
 
   @OneToMany(() => Review, review => review.product)
   reviews: Review[];
+  
 
   @CreateDateColumn()
   createdAt: Date;

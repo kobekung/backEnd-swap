@@ -1,5 +1,5 @@
 // src/modules/reports/reports.controller.ts
-import { Controller, Post, Body, Param, Get, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Param, Get, Patch, Req } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 
@@ -7,11 +7,7 @@ import { CreateReportDto } from './dto/create-report.dto';
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-  // Create a new report
-  @Post()
-  async createReport(@Body() createReportDto: CreateReportDto) {
-    return this.reportsService.createReport(createReportDto);
-  }
+
 
   // Get all reports
   @Get()
