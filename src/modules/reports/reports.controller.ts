@@ -7,7 +7,15 @@ import { CreateReportDto } from './dto/create-report.dto';
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-
+  @Post()
+  async reportProduct(
+    @Body('productId') productId: number,
+    @Body('userId') userId: number,
+    @Body('reason') reason: string,
+    @Body('details') details?: string
+  ) {
+    return this.reportsService.reportProduct(productId, userId, reason, details);
+  }
 
   // Get all reports
   @Get()

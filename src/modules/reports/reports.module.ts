@@ -4,9 +4,10 @@ import { ReportsService } from './reports.service';
 import { ReportsController } from './reports.controller';
 import { Report } from './report.entity'; // Ensure correct path
 import { User } from '../users/users.entity';
+import { Product } from '../products/products.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Report, User])],
+  imports: [TypeOrmModule.forFeature([Report, User,Product])],
   providers: [ReportsService],
   controllers: [ReportsController],
   exports: [ReportsService],

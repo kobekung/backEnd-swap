@@ -7,6 +7,7 @@ import { ProductCategory } from '../product-categories/product-categories.entity
 import { Review } from '../reviews/review.entity';
 import { Chat } from '../chats/chat.entity';
 import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
+import { Report } from '../reports/report.entity';
 
 @Entity('products')
 export class Product {
@@ -51,6 +52,8 @@ export class Product {
   @OneToMany(() => Review, review => review.product)
   reviews: Review[];
   
+  @OneToMany(() => Report, (report) => report.product)
+  reports: Report[];
 
   @CreateDateColumn()
   createdAt: Date;

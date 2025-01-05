@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'; // Ensure correct path
 import { User } from '../users/users.entity';
+import { Product } from '../products/products.entity';
 
 @Entity('reports')
 export class Report {
@@ -27,6 +28,9 @@ export class Report {
 
   @ManyToOne(() => User, (user) => user.reports)
   user: User;
+
+  @ManyToOne(() => Product, (product) => product.reports)
+  product: Product;
 
   @CreateDateColumn()
   createdAt: Date;
