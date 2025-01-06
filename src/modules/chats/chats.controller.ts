@@ -24,6 +24,12 @@ export class ChatsController {
     const chats = await this.chatsService.getChatsBetweenUsers(fromUserId, toUserId);
     return chats;
   }
- 
+  
+  @Get('getByProductId/:productId')
+  async getChatsByProductId(@Param('productId') productId: number) {
+    // Call the service method to get chats by product id
+    const chats = await this.chatsService.getChatsByProductId(productId);
+    return chats;
+  }
 
 }

@@ -95,5 +95,29 @@ export class ChatsService {
       },
     }));
   }
+  async getChatsByProductId(productId: number): Promise<any[]> {
+    const chats = await this.chatRepository.find({
+      where: { product: { id: productId } },
+      relations: ['sender', 'receiver'], // Ensure sender and receiver relations are loaded
+    });
   
+    // Format the response to include sender and receiver details
+    return chats.map((chat) => ({
+      id: chat.id,
+      message: chat.message,
+      createdAt: chat.createdAt,
+      sender: {
+        id: chat.sender.id,
+        firstName: chat.sender.firstName,
+        lastName: chat.sender.lastName,
+        profilePicture: chat.sender.profilePicture,
+      },
+      receiver: {
+        id: chat.receiver.id,
+        firstName: chat.receiver.firstName,
+        lastName: chat.receiver.lastName,
+        profilePicture: chat.receiver.profilePicture,
+      },
+    }));
+  }  
 }
