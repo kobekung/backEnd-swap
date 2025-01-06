@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, HttpException, HttpStatus, Param, Patch, InternalServerErrorException } from '@nestjs/common';
+import { Body, Controller, Get, Post, HttpException, HttpStatus, Param, Patch, InternalServerErrorException, ParseIntPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/UpdateUserDto';
@@ -34,5 +34,9 @@ export class UsersController {
       console.error('Error in editProfile controller:', error);
       throw new InternalServerErrorException('Error updating user');
     }
+  }
+  @Patch(':id/ban')
+  async banUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.banUser(id);
   }
 }
