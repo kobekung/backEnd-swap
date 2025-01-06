@@ -55,21 +55,6 @@ export class UsersService {
       throw new InternalServerErrorException('Error updating user');
     }
   }
-  async banUser(userId: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
-
-    if (!user) {
-      throw new NotFoundException(`User with ID ${userId} not found.`);
-    }
-
-    if (user.status === 'off') {
-      throw new Error(`User with ID ${userId} is already banned.`);
-    }
-
-    user.status = 'off';
-    return await this.usersRepository.save(user);
-  }
-  
 
   
 }

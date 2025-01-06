@@ -37,8 +37,9 @@ export class Offer {
   @ManyToOne(() => User, user => user.receivedOffers)  // Relationship for the receiver
   toUser: User;
 
-  @ManyToOne(() => Product, product => product.offers)
+  @ManyToOne(() => Product, (product) => product.offers, { onDelete: 'CASCADE' })
   product: Product;
+  
 
   @CreateDateColumn()
   createdAt: Date;

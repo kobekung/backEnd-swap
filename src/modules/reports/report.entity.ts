@@ -29,8 +29,9 @@ export class Report {
   @ManyToOne(() => User, (user) => user.reports)
   user: User;
 
-  @ManyToOne(() => Product, (product) => product.reports)
-  product: Product;
+  @ManyToOne(() => Product, (product) => product.reports, { onDelete: 'CASCADE' })
+product: Product;
+
 
   @CreateDateColumn()
   createdAt: Date;

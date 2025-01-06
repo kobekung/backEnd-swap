@@ -9,6 +9,7 @@ import { ProductCategory } from '../product-categories/product-categories.entity
 import { Product } from './products.entity';
 import { ProductCategoryService } from '../product-categories/product-categories.service';
 import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
+import { Offer } from '../offers/offer.entity';
 
 @Injectable()
 export class ProductsService {
@@ -19,6 +20,8 @@ export class ProductsService {
     private readonly usersService: UsersService,
 
     private readonly productCategoryService: ProductCategoryService,  // Inject ProductCategoryService
+    @InjectRepository(Offer)  // Inject Offer repository to delete related records
+    private offersRepository: Repository<Offer>,
   ) {}
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
@@ -82,6 +85,18 @@ export class ProductsService {
   
     return { productId: product.id, status: product.status };
   }
-  
+  async deleteById(productId: number): Promise<{ message: string }> {
+    // First, delete the related offers (or any other related data)
+    await this.offersRepository.delete({ id: productId });
+
+    // Now delete the product
+    const deleteResult = await this.productsRepository.delete(productId);
+
+    if (deleteResult.affected === 0) {
+        throw new NotFoundException(`Product with ID ${productId} not found.`);
+    }
+
+    return { message: `Product with ID ${productId} has been successfully deleted.` };
+}
   
 }

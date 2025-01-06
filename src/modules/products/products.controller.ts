@@ -57,10 +57,10 @@ async createProduct(@Body() createProductDto: CreateProductDto) {
       fileUrl: `http://localhost:3001/uploads/${file.filename}`, // Return URL of the uploaded file
     };
   }
- @Delete(':id')
-  async deleteProduct(@Param('id') id: number): Promise<void> { 
-    await this.productsService.deleteProduct(id);
-  }
+//  @Delete(':id')
+//   async deleteProduct(@Param('id') id: number): Promise<void> { 
+//     await this.productsService.deleteProduct(id);
+//   }
   @Get('/name/:name')
   async findByName(@Param('name') name: string): Promise<Product> {
     return this.productsService.findByName(name);
@@ -81,5 +81,10 @@ async createProduct(@Body() createProductDto: CreateProductDto) {
 async checkStatusByProductId(@Param('productId') productId: number) {
   return this.productsService.checkStatus(productId);
 }
+@Delete(':id')
+async deleteProduct(@Param('id') id: number): Promise<{ message: string }> {
+  return this.productsService.deleteById(id);
+}
+
 
 }
