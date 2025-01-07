@@ -7,7 +7,7 @@ import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [MasterModule, NotificationsModule, FollowModule, AuthModule,], // Import the MasterModule
+  imports: [MasterModule, NotificationsModule, FollowModule, AuthModule], // Import the MasterModule
   controllers: [AppController],
   providers: [AppService],
 })
