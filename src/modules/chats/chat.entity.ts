@@ -23,7 +23,7 @@ export class Chat {
   @ManyToOne(() => User, user => user.receivedChats)
   receiver: User;
 
-  @ManyToOne(() => Product, (product) => product.chats, { nullable: true })
+  @ManyToOne(() => Product, (product) => product.chats, { onDelete: 'CASCADE' })
   product: Product;
 
 

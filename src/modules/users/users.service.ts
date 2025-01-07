@@ -11,6 +11,15 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
   ) {}
+  async updateProfilePicture(userId: string, profilePictureUrl: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: Number(userId) } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.profilePicture = profilePictureUrl;
+    return this.usersRepository.save(user); // Save the updated user
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     // ตรวจสอบการมีอยู่ของผู้ใช้ที่มีอีเมลหรือหมายเลขโทรศัพท์ซ้ำ
