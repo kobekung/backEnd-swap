@@ -34,7 +34,7 @@ export class AuthService {
       return this.generateToken(user);
     } catch (error) {
       if (error instanceof ConflictException) {
-        throw new HttpException('User with this email or phone number already exists', HttpStatus.CONFLICT);
+        throw new HttpException('เบอร์โทรหรืออีเมลถูกใช้แล้ว', HttpStatus.CONFLICT);
       }
       throw new HttpException('An error occurred during registration', HttpStatus.INTERNAL_SERVER_ERROR);
     }

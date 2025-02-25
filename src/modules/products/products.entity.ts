@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
   // Ensure correct path
 import { Comment } from '../comments/comment.entity';  // Ensure correct path
 import { Offer } from '../offers/offer.entity';  // Ensure correct path
@@ -8,6 +8,10 @@ import { Review } from '../reviews/review.entity';
 import { Chat } from '../chats/chat.entity';
 import { PRODUCT_STATUS_ENUM } from 'src/enums/product_status.enum';
 import { Report } from '../reports/report.entity';
+import { Region } from '../region/entities/region.entity';
+import { Province } from '../province/entities/province.entity';
+import { District } from '../district/entities/district.entity';
+import { Subdistrict } from '../subdistrict/entities/subdistrict.entity';
 
 @Entity('products')
 export class Product {
